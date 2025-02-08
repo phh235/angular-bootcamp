@@ -1,1 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Google Sans";
+  src: url("../public/fonts/GoogleSans-Regular.ttf") format("truetype");
+}
+
+* {
+  font-family: "Google Sans", sans-serif;
+}
+
+.material-symbols-outlined {
+  font-size: 20px;
+}
