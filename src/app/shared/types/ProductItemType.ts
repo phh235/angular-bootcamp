@@ -6,3 +6,10 @@ export type ProductItemType = {
   altText: string;
   quantity: number;
 }
+
+export type BlogItem = {
+  id?: number;
+  title?: string;
+  body?: string;
+  author?: string;
+}
