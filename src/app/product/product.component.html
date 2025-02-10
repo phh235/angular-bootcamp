@@ -4,14 +4,23 @@
       Shopping Cart
     </h2>
 
+    <button
+      (click)="handleChangeVisible()"
+      class="transition text-white bg-sky-700 hover:bg-sky-800 focus:ring-4 focus:ring-sky-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-sky-600 dark:hover:bg-sky-700 focus:outline-none dark:focus:ring-sky-800"
+    >
+      Show/Hide
+    </button>
+
     <div class="mt-6 sm:mt-8 md:gap-6 lg:flex lg:items-start xl:gap-8">
       <div class="mx-auto w-full flex-none lg:max-w-2xl xl:max-w-4xl">
-        <product-item
-          [products]="products"
-          [decrementQuantity]="decrementQuantity"
-          [incrementQuantity]="incrementQuantity"
-          (dataEvent)="handleDeleteProduct($event)"
-        ></product-item>
+        <div *ngIf="isVisible">
+          <product-item
+            [products]="products"
+            [decrementQuantity]="decrementQuantity"
+            [incrementQuantity]="incrementQuantity"
+            (dataEvent)="handleDeleteProduct($event)"
+          ></product-item>
+        </div>
       </div>
 
       <div class="mx-auto mt-6 max-w-4xl flex-1 space-y-6 lg:mt-0 lg:w-full">

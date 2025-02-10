@@ -1,16 +1,40 @@
-import { Component } from '@angular/core';
+import { HttpClient, provideHttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
 import { ProductItemType } from '../shared/types/ProductItemType';
-import { ProductItemComponent } from '../shared/product-item/product-item.component';
+import { ProductItemComponent } from '../shared/components/product-item/product-item.component';
 import { isBuffer } from 'util';
+import { NgIf } from '@angular/common';
+import { BlogService } from '../services/BlogService';
 
 @Component({
   selector: 'product',
   standalone: true,
-  imports: [ProductItemComponent],
+  imports: [ProductItemComponent, NgIf],
   templateUrl: './product.component.html',
   styleUrl: './product.component.css'
 })
-export class ProductComponent {
+export class ProductComponent implements OnInit {
+  isVisible = true;
+
+  constructor(private blogService: BlogService) { }
+
+  ngOnInit(): void {
+    this.blogService.getBlogs()
+      .subscribe(({ data }) => {
+        // this.products = data;
+        // this.products = data.map((item: any) => {
+        //   return {
+        //     id: item.id,
+        //     name: item.title,
+        //     price: item.price,
+        //     imageUrl: item.imageUrl,
+        //     altText: item.title,
+        //     quantity: 1
+        //   }
+        // })
+      });
+  }
+
   products: ProductItemType[] = [
     {
       "id": 1,
@@ -68,5 +92,9 @@ export class ProductComponent {
 
   handleDeleteProduct = (id: number) => {
     this.products = this.products.filter(product => product.id !== id);
+  }
+
+  handleChangeVisible = () => {
+    this.isVisible = false;
   }
 }

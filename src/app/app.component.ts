@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { HeaderLayoutComponent } from './shared/HeaderLayout/header-layout.component';
+import { HeaderLayoutComponent } from './shared/components/HeaderLayout/header-layout.component';
 import { FormsModule } from '@angular/forms';
 
 @Component({
