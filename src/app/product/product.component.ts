@@ -1,10 +1,11 @@
 import { HttpClient, provideHttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ProductItemType } from '../shared/types/ProductItemType';
 import { ProductItemComponent } from '../shared/components/product-item/product-item.component';
 import { isBuffer } from 'util';
 import { NgIf } from '@angular/common';
 import { BlogService } from '../services/BlogService';
+import { map, Subscription } from 'rxjs';
 
 @Component({
   selector: 'product',
@@ -13,26 +14,36 @@ import { BlogService } from '../services/BlogService';
   templateUrl: './product.component.html',
   styleUrl: './product.component.css'
 })
-export class ProductComponent implements OnInit {
+export class ProductComponent implements OnInit, OnDestroy {
   isVisible = true;
 
-  constructor(private blogService: BlogService) { }
+  getBlogApi: Subscription;
+
+  constructor(private blogService: BlogService) { this.getBlogApi = new Subscription(); }
 
   ngOnInit(): void {
-    this.blogService.getBlogs()
-      .subscribe(({ data }) => {
-        // this.products = data;
-        // this.products = data.map((item: any) => {
-        //   return {
-        //     id: item.id,
-        //     name: item.title,
-        //     price: item.price,
-        //     imageUrl: item.imageUrl,
-        //     altText: item.title,
-        //     quantity: 1
-        //   }
-        // })
+    this.getBlogApi = this.blogService.getBlogs()
+      .pipe(
+        map(({ data }) =>
+          data.map((item: any) => {
+            return {
+              ...item,
+              name: item.title,
+              price: Number(item.body),
+              imageUrl: item.imageUrl,
+            }
+          }).filter(product => product.price >= 400000)
+        ),
+      ).subscribe((res) => {
+        this.products = res;
       });
+  }
+
+  ngOnDestroy(): void {
+    if (this.getBlogApi) {
+      this.getBlogApi.unsubscribe();
+    }
+    console.log('Unsubscribed component');
   }
 
   products: ProductItemType[] = [
